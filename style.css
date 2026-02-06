@@ -4,10 +4,6 @@ body {
   margin: 8px;
 }
 
-h2 {
-  margin-top: 16px;
-}
-
 .table-wrap {
   overflow-x: auto;
 }
@@ -30,26 +26,10 @@ input {
   text-align: right;
 }
 
-button {
-  margin-top: 8px;
+/* 鶏むね肉の入力枠を赤く */
+tr[data-chicken="true"] input {
+  border: 2px solid red;
 }
 
-.ok {
-  color: green;
-  font-weight: bold;
-}
-
-.ng {
-  color: red;
-  font-weight: bold;
-}
-
-@media (max-width: 480px) {
-  th, td {
-    font-size: 12px;
-    padding: 3px;
-  }
-  input {
-    width: 50px;
-  }
-}
+.ok { color: green; font-weight: bold; }
+.ng { color: red; font-weight: bold; }
