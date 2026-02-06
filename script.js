@@ -1,19 +1,37 @@
+const CHICKEN_P = 22 / 100; // gあたり
+const CHICKEN_F = 2 / 100;
+const CHICKEN_K = 120 / 100; // 目安カロリー
+
 function ceil(v) {
   return Math.ceil(v);
 }
 
+function calculateChicken() {
+  const row = document.querySelector('tr[data-chicken="true"]');
+  if (!row) return;
+
+  const g = Number(row.children[1].querySelector("input").value);
+
+  const p = ceil(g * CHICKEN_P);
+  const f = ceil(g * CHICKEN_F);
+  const k = ceil(g * CHICKEN_K);
+
+  row.querySelector(".p").textContent = p;
+  row.querySelector(".f").textContent = f;
+  row.querySelector(".k").textContent = k;
+}
+
 function calculate() {
+  calculateChicken();
+
   const rows = document.querySelectorAll("#foodTable tbody tr");
 
-  let totalP = 0;
-  let totalF = 0;
-  let totalK = 0;
+  let totalP = 0, totalF = 0, totalK = 0;
 
   rows.forEach(row => {
-    const amount = Number(row.children[1].querySelector("input").value);
-    const p = Number(row.children[2].textContent);
-    const f = Number(row.children[3].textContent);
-    const k = Number(row.children[4].textContent);
+    const p = Number(row.children[2].textContent) || 0;
+    const f = Number(row.children[3].textContent) || 0;
+    const k = Number(row.children[4].textContent) || 0;
 
     totalP += p;
     totalF += f;
@@ -24,17 +42,14 @@ function calculate() {
   totalF = ceil(totalF);
   totalK = ceil(totalK);
 
-  document.getElementById("totalArea").innerHTML =
+  document.getElementById("totalArea").textContent =
     `P:${totalP}g / F:${totalF}g / ${totalK}kcal`;
 
   const targetP = Number(document.getElementById("targetProtein").value);
   const targetF = Number(document.getElementById("targetFat").value);
 
-  let lackP = targetP - totalP;
-  let lackF = targetF - totalF;
-
-  if (lackP < 0) lackP = 0;
-  if (lackF < 0) lackF = 0;
+  let lackP = Math.max(0, targetP - totalP);
+  let lackF = Math.max(0, targetF - totalF);
 
   document.getElementById("lackArea").innerHTML =
     `<span class="${lackP === 0 ? 'ok':'ng'}">不足P:${lackP}g</span> /
@@ -43,19 +58,18 @@ function calculate() {
   const proteinPowder = ceil(lackP / 0.7);
   const oliveOil = ceil(lackF);
 
-  document.getElementById("replaceArea").innerHTML =
-    `プロテイン:${proteinPowder}g（P${ceil(proteinPowder*0.7)}g） /
-     オリーブオイル:${oliveOil}g（F${oliveOil}g）`;
+  document.getElementById("replaceArea").textContent =
+    `プロテイン:${proteinPowder}g / オリーブオイル:${oliveOil}g`;
 }
 
 function addRow() {
   const tr = document.createElement("tr");
   tr.innerHTML = `
     <td><input></td>
-    <td><input type="number" value="0"></td>
-    <td><input type="number" value="0"></td>
-    <td><input type="number" value="0"></td>
-    <td><input type="number" value="0"></td>
+    <td><input type="number"></td>
+    <td><input type="number"></td>
+    <td><input type="number"></td>
+    <td><input type="number"></td>
     <td><button onclick="this.closest('tr').remove();calculate()">×</button></td>
   `;
   document.querySelector("#foodTable tbody").appendChild(tr);
