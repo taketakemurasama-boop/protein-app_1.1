@@ -1,145 +1,88 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>栄養計算</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-  body { font-family: sans-serif; padding: 16px; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
-  th, td { border: 1px solid #000; padding: 6px; text-align: center; }
-  th { background: #eee; }
-  .target th { background: #ffd966; }
-  .free { background: #ffe5e5; }
-  .ok { color: green; font-weight: bold; }
-  .ng { color: red; font-weight: bold; }
-  button { padding: 8px 12px; margin: 4px 0; }
-</style>
+  <meta charset="UTF-8">
+  <title>栄養計算アプリ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h3>● 目標値</h3>
-<table class="target">
-<tr><th>脂質(g)</th><th>蛋白質(g)</th></tr>
-<tr>
-  <td><input id="targetFat" type="number" value="50"></td>
-  <td><input id="targetProtein" type="number" value="150"></td>
-</tr>
-</table>
+<h2>一日の目標</h2>
+<div class="targets">
+  タンパク質(g)
+  <input type="number" id="targetProtein" value="140">
+  脂質(g)
+  <input type="number" id="targetFat" value="60">
+</div>
 
-<h3>● 一日の食事内容</h3>
+<h2>一日の食事内容</h2>
 
+<div class="table-wrap">
 <table id="foodTable">
-<tr>
-  <th>食品名</th>
-  <th>量(g)</th>
-  <th>糖質(g)</th>
-  <th>脂質(g)</th>
-  <th>蛋白質(g)</th>
-  <th>Cal</th>
-  <th></th>
-</tr>
-
-<tr>
-  <td>鶏むね肉</td>
-  <td><input class="free chicken" type="number" value="400"></td>
-  <td>0</td>
-  <td class="fat">6</td>
-  <td class="protein">92</td>
-  <td class="cal">440</td>
-  <td></td>
-</tr>
+  <thead>
+    <tr>
+      <th>食材名</th>
+      <th>量(g)</th>
+      <th>P</th>
+      <th>F</th>
+      <th>Kcal</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- 固定行 -->
+    <tr data-fixed="true">
+      <td>お米(炊飯前)</td>
+      <td><input type="number" value="225"></td>
+      <td>6</td><td>13.5</td><td>810</td>
+      <td></td>
+    </tr>
+    <tr data-fixed="true">
+      <td>オールブラン</td>
+      <td><input type="number" value="40"></td>
+      <td>3.8</td><td>3.3</td><td>140</td>
+      <td></td>
+    </tr>
+    <tr data-fixed="true">
+      <td>納豆</td>
+      <td><input type="number" value="45"></td>
+      <td>5</td><td>7</td><td>90</td>
+      <td></td>
+    </tr>
+    <tr data-fixed="true">
+      <td>ヨーグルト</td>
+      <td><input type="number" value="100"></td>
+      <td>3</td><td>4</td><td>60</td>
+      <td></td>
+    </tr>
+    <tr data-fixed="true">
+      <td>牛乳</td>
+      <td><input type="number" value="100"></td>
+      <td>3.3</td><td>3.8</td><td>67</td>
+      <td></td>
+    </tr>
+    <tr data-fixed="true">
+      <td>プロテイン(朝)</td>
+      <td><input type="number" value="30"></td>
+      <td>21</td><td>1.7</td><td>118</td>
+      <td></td>
+    </tr>
+  </tbody>
 </table>
+</div>
 
 <button onclick="addRow()">＋ 食材追加</button>
-<button onclick="calc()">計算</button>
 
-<h3>● 一日の合計栄養素</h3>
-<table>
-<tr><th>脂質(g)</th><th>蛋白質(g)</th><th>Cal</th></tr>
-<tr>
-  <td id="sumFat"></td>
-  <td id="sumProtein"></td>
-  <td id="sumCal"></td>
-</tr>
-</table>
+<h2>一日の合計</h2>
+<div id="totalArea"></div>
 
-<h3>● 不足分</h3>
-<table>
-<tr><th>脂質(g)</th><th>蛋白質(g)</th></tr>
-<tr>
-  <td id="lackFat"></td>
-  <td id="lackProtein"></td>
-</tr>
-</table>
+<h2>不足分</h2>
+<div id="lackArea"></div>
 
-<h3>● プロテインに置き換えると</h3>
-<b id="needProteinPowder"></b> g
+<h2>置き換え</h2>
+<div id="replaceArea"></div>
 
-<h3>● オリーブオイルに置き換えると</h3>
-<b id="needOil"></b> g
-
-<script>
-function ceil(v){ return Math.ceil(v); }
-
-function addRow(){
-  const row = document.createElement("tr");
-  row.innerHTML = `
-    <td><input placeholder="食品名"></td>
-    <td><input type="number"></td>
-    <td><input type="number"></td>
-    <td><input type="number" class="fat"></td>
-    <td><input type="number" class="protein"></td>
-    <td><input type="number" class="cal"></td>
-    <td><button onclick="this.parentNode.parentNode.remove()">削除</button></td>
-  `;
-  foodTable.appendChild(row);
-}
-
-function calc(){
-  let fat = 0, protein = 0, cal = 0;
-
-  document.querySelectorAll("#foodTable tr").forEach((row, i)=>{
-    if(i === 0) return;
-
-    const chickenInput = row.querySelector(".chicken");
-    if(chickenInput){
-      const g = Number(chickenInput.value);
-      const f = ceil(g * 0.02);
-      const p = ceil(g * 0.22);
-      const c = ceil(g * 1.1);
-
-      row.querySelector(".fat").textContent = f;
-      row.querySelector(".protein").textContent = p;
-      row.querySelector(".cal").textContent = c;
-
-      fat += f; protein += p; cal += c;
-    } else {
-      fat += Number(row.querySelector(".fat input")?.value || 0);
-      protein += Number(row.querySelector(".protein input")?.value || 0);
-      cal += Number(row.querySelector(".cal input")?.value || 0);
-    }
-  });
-
-  fat = ceil(fat); protein = ceil(protein); cal = ceil(cal);
-
-  sumFat.textContent = fat;
-  sumProtein.textContent = protein;
-  sumCal.textContent = cal;
-
-  const lackF = ceil(targetFat.value - fat);
-  const lackP = ceil(targetProtein.value - protein);
-
-  lackFat.textContent = lackF <= 0 ? 0 : lackF;
-  lackProtein.textContent = lackP <= 0 ? 0 : lackP;
-
-  lackFat.className = lackF <= 0 ? "ok" : "ng";
-  lackProtein.className = lackP <= 0 ? "ok" : "ng";
-
-  needProteinPowder.textContent = lackP > 0 ? ceil(lackP / 0.7) : 0;
-  needOil.textContent = lackF > 0 ? lackF : 0;
-}
-</script>
-
+<script src="script.js"></script>
 </body>
-</html
+</html>
