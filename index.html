@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>プロテイン計算</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; padding: 16px; }
+    input { width: 100%; padding: 8px; margin-bottom: 8px; }
+    button { padding: 10px; width: 100%; font-size: 16px; }
+    .result { margin-top: 16px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h2>栄養計算</h2>
+
+<h3>目標</h3>
+<input id="targetProtein" type="number" placeholder="目標タンパク質 (g)">
+<input id="targetFat" type="number" placeholder="目標脂質 (g)">
+
+<h3>今日の食事</h3>
+<input id="foodProtein" type="number" placeholder="摂取タンパク質 (g)">
+<input id="foodFat" type="number" placeholder="摂取脂質 (g)">
+<input id="foodCal" type="number" placeholder="摂取カロリー (kcal)">
+
+<button onclick="calc()">計算する</button>
+
+<div class="result" id="result"></div>
+
+<script>
+function calc() {
+  const tp = Number(targetProtein.value);
+  const tf = Number(targetFat.value);
+  const fp = Number(foodProtein.value);
+  const ff = Number(foodFat.value);
+  const fc = Number(foodCal.value);
+
+  const needProtein = Math.max(0, tp - fp);
+  const needFat = Math.max(0, tf - ff);
+
+  const proteinCal = needProtein * 4;
+  const oilCal = needFat * 9;
+
+  const totalCal = fc + proteinCal + oilCal;
+
+  result.innerHTML = `
+    総摂取タンパク質: ${fp} g<br>
+    総摂取脂質: ${ff} g<br>
+    <br>
+    必須プロテイン量: ${needProtein} g<br>
+    必須オリーブオイル量: ${needFat} g<br>
+    <br>
+    最終カロリー: ${totalCal} kcal
+  `;
+}
+</script>
+
+</body>
+</html>
