@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -8,82 +9,56 @@
 <body>
 
 <h2>一日の目標</h2>
-<div class="targets">
-  タンパク質(g)
-  <input type="number" id="targetProtein" value="160">
-  脂質(g)
-  <input type="number" id="targetFat" value="50">
-</div>
+タンパク質 <input type="number" id="targetProtein" value="160">
+脂質 <input type="number" id="targetFat" value="50">
 
-<h2>一日の食事内容</h2>
+<h2>食事内容</h2>
 
-<div class="table-wrap">
 <table id="foodTable">
   <thead>
     <tr>
-      <th>食材名</th>
+      <th>食材</th>
       <th>量(g)</th>
       <th>P</th>
       <th>F</th>
       <th>Kcal</th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
 
-    <!-- 鶏むね肉（自由入力・自動計算） -->
-    <tr data-chicken="true">
-      <td>鶏むね肉</td>
+    <tr data-food="chicken">
+      <td>鶏むね肉（皮なし）</td>
       <td><input type="number" value="400"></td>
-      <td class="p"></td>
-      <td class="f"></td>
-      <td class="k"></td>
-      <td></td>
+      <td class="p">0</td>
+      <td class="f">0</td>
+      <td class="k">0</td>
     </tr>
 
-    <!-- 固定行 -->
-    <tr>
-      <td>お米(炊飯前)</td>
-      <td>225</td><td>6</td><td>13.5</td><td>810</td><td></td>
+    <tr data-food="rice">
+      <td>お米（炊飯前）</td>
+      <td>225</td>
+      <td class="p">6</td>
+      <td class="f">13.5</td>
+      <td class="k">810</td>
     </tr>
-    <tr>
-      <td>オールブラン</td>
-      <td>40</td><td>3.8</td><td>3.3</td><td>140</td><td></td>
-    </tr>
-    <tr>
-      <td>納豆</td>
-      <td>45</td><td>5</td><td>7</td><td>90</td><td></td>
-    </tr>
-    <tr>
-      <td>ヨーグルト</td>
-      <td>100</td><td>3</td><td>4</td><td>60</td><td></td>
-    </tr>
-    <tr>
-      <td>牛乳</td>
-      <td>100</td><td>3.3</td><td>3.8</td><td>67</td><td></td>
-    </tr>
-    <tr>
-      <td>プロテイン(朝)</td>
-      <td>30</td><td>21</td><td>1.7</td><td>118</td><td></td>
+
+    <tr data-food="protein">
+      <td>プロテイン</td>
+      <td>30</td>
+      <td class="p">21</td>
+      <td class="f">1.7</td>
+      <td class="k">118</td>
     </tr>
 
   </tbody>
 </table>
-</div>
 
-<button onclick="addRow()">＋ 食材追加</button>
-
-<h2>一日の合計</h2>
+<h2>合計</h2>
 <div id="totalArea"></div>
 
-<h2>不足分</h2>
+<h2>不足</h2>
 <div id="lackArea"></div>
-
-<h2>置き換え</h2>
-<div id="replaceArea"></div>
 
 <script src="script.js"></script>
 </body>
 </html>
-
-
