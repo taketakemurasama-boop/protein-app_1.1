@@ -1,9 +1,9 @@
 const FOOD_DB = {
   rice:    { p: 6.1, f: 0.9, k: 342 }, // 炊飯前100g
   protein: { p: 72.3,  f: 5.7,   k: 392 }, // プロテイン100g想定
-  chicken: { p: 22.5,  f: 2.6, k: 120 },
+  chicken: { p: 23,  f: 2, k: 120 },
   allbran: { p: 15,  f: 6, k: 350 },
-  natto:   { p: 19.4,  f: 11,  k: 212 },
+  natto:   { p: 19,  f: 11,  k: 212 },
   yogurt:  { p: 3.5,   f: 3.7,   k: 61 },
   milk:    { p: 3.3, f: 3.8, k: 65 }
 };
@@ -104,4 +104,5 @@ function loadState() {
 document.addEventListener("input", calculate);
 loadState();
 calculate();
+
 
