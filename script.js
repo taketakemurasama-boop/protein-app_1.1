@@ -1,5 +1,6 @@
 const FOOD_DB = {
   rice:    { p: 6.1, f: 0.9, k: 356 }, // 炊飯前100g
+  protein: { p: 70,  f: 5,   k: 400 }, // プロテイン100g想定
   chicken: { p: 23,  f: 1.5, k: 120 },
   allbran: { p: 13,  f: 8.3, k: 350 },
   natto:   { p: 11,  f: 16,  k: 200 },
@@ -7,7 +8,7 @@ const FOOD_DB = {
   milk:    { p: 3.3, f: 3.8, k: 67 }
 };
 
-const PROTEIN_RATIO = 0.7; // プロテインのP含有率
+const PROTEIN_RATIO = 0.7; // 不足分換算用
 
 function round1(v) {
   return Math.round(v * 10) / 10;
