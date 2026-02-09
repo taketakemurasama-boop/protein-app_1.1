@@ -1,35 +1,23 @@
 body {
   font-family: system-ui, sans-serif;
   font-size: 14px;
-  margin: 8px;
-}
-
-.table-wrap {
-  overflow-x: auto;
 }
 
 table {
-  width: 100%;
-  min-width: 420px;
   border-collapse: collapse;
+  margin-top: 8px;
 }
 
 th, td {
   border: 1px solid #ccc;
-  padding: 4px;
+  padding: 6px;
   text-align: center;
 }
 
 input {
-  width: 60px;
-  font-size: 12px;
+  width: 70px;
   text-align: right;
 }
 
-/* 鶏むね肉の入力枠を赤く */
-tr[data-chicken="true"] input {
-  border: 2px solid red;
-}
-
-.ok { color: green; font-weight: bold; }
-.ng { color: red; font-weight: bold; }
+.ok { color: green; }
+.ng { color: red; }
