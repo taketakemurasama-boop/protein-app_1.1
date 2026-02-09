@@ -1,9 +1,10 @@
 const FOOD_DB = {
-  chicken: { p: 23, f: 1.5, k: 120 },
-  allbran: { p: 13, f: 8.3, k: 350 },
-  natto: { p: 11, f: 16, k: 200 },
-  yogurt: { p: 3, f: 4, k: 60 },
-  milk: { p: 3.3, f: 3.8, k: 67 }
+  rice:    { p: 2.5, f: 0.3, k: 168 },   // 炊飯後100g
+  chicken: { p: 23,  f: 1.5, k: 120 },
+  allbran: { p: 13,  f: 8.3, k: 350 },
+  natto:   { p: 11,  f: 16,  k: 200 },
+  yogurt:  { p: 3,   f: 4,   k: 60 },
+  milk:    { p: 3.3, f: 3.8, k: 67 }
 };
 
 function ceil(v) {
@@ -17,9 +18,10 @@ function calculate() {
 
   document.querySelectorAll("#foodTable tbody tr").forEach(row => {
     const key = row.dataset.food;
-    const amount = Number(row.querySelector("input").value) || 0;
     const base = FOOD_DB[key];
+    if (!base) return; // ← 定義漏れ防止
 
+    const amount = Number(row.querySelector("input").value) || 0;
     const ratio = amount / 100;
 
     const p = base.p * ratio;
@@ -35,12 +37,8 @@ function calculate() {
     totalK += k;
   });
 
-  totalP = ceil(totalP);
-  totalF = ceil(totalF);
-  totalK = ceil(totalK);
-
   totalArea.textContent =
-    `P:${totalP}g / F:${totalF}g / ${totalK}kcal`;
+    `P:${ceil(totalP)}g / F:${ceil(totalF)}g / ${ceil(totalK)}kcal`;
 
   const targetP = Number(targetProtein.value);
   const targetF = Number(targetFat.value);
@@ -49,8 +47,8 @@ function calculate() {
   const lackF = Math.max(0, targetF - totalF);
 
   lackArea.innerHTML =
-    `<span class="${lackP === 0 ? 'ok' : 'ng'}">不足P:${lackP}g</span> /
-     <span class="${lackF === 0 ? 'ok' : 'ng'}">不足F:${lackF}g</span>`;
+    `<span class="${lackP === 0 ? 'ok' : 'ng'}">不足P:${ceil(lackP)}g</span> /
+     <span class="${lackF === 0 ? 'ok' : 'ng'}">不足F:${ceil(lackF)}g</span>`;
 
   saveState();
 }
@@ -63,13 +61,11 @@ function saveState() {
       row.querySelector("input").value;
   });
 
-  const state = {
+  localStorage.setItem("nutritionState", JSON.stringify({
     targetProtein: targetProtein.value,
     targetFat: targetFat.value,
     amounts
-  };
-
-  localStorage.setItem("nutritionState", JSON.stringify(state));
+  }));
 }
 
 function loadState() {
