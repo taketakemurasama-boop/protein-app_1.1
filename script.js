@@ -13,41 +13,48 @@ function calculate() {
   rows.forEach(row => {
     const amount = Number(row.children[1].querySelector("input").value) || 0;
 
-    // P/F/K は input から読む（100gあたり）
-    const baseP = Number(row.children[2].querySelector("input")?.value || row.children[2].textContent) || 0;
-    const baseF = Number(row.children[3].querySelector("input")?.value || row.children[3].textContent) || 0;
-    const baseK = Number(row.children[4].querySelector("input")?.value || row.children[4].textContent) || 0;
+    // P/F/K は「100gあたりの基準値」として読む
+    const baseP = Number(
+      row.children[2].querySelector("input")?.value ??
+      row.children[2].textContent
+    ) || 0;
+
+    const baseF = Number(
+      row.children[3].querySelector("input")?.value ??
+      row.children[3].textContent
+    ) || 0;
+
+    const baseK = Number(
+      row.children[4].querySelector("input")?.value ??
+      row.children[4].textContent
+    ) || 0;
 
     const ratio = amount / 100;
 
-    const calcP = baseP * ratio;
-    const calcF = baseF * ratio;
-    const calcK = baseK * ratio;
-
-    totalP += calcP;
-    totalF += calcF;
-    totalK += calcK;
+    totalP += baseP * ratio;
+    totalF += baseF * ratio;
+    totalK += baseK * ratio;
   });
 
-  document.getElementById("totalArea").innerHTML =
-    `P:${Math.ceil(totalP)}g / F:${Math.ceil(totalF)}g / ${Math.ceil(totalK)}kcal`;
-}
+  totalP = ceil(totalP);
+  totalF = ceil(totalF);
+  totalK = ceil(totalK);
 
   document.getElementById("totalArea").innerHTML =
-    `P:${ceil(totalP)}g / F:${ceil(totalF)}g / ${ceil(totalK)}kcal`;
+    `P:${totalP}g / F:${totalF}g / ${totalK}kcal`;
 
   const targetP = Number(document.getElementById("targetProtein").value);
   const targetF = Number(document.getElementById("targetFat").value);
 
-  let lackP = targetP - ceil(totalP);
-  let lackF = targetF - ceil(totalF);
+  let lackP = targetP - totalP;
+  let lackF = targetF - totalF;
 
   if (lackP < 0) lackP = 0;
   if (lackF < 0) lackF = 0;
 
   document.getElementById("lackArea").innerHTML =
-    `<span class="${lackP === 0 ? 'ok':'ng'}">不足P:${lackP}g</span> /
-     <span class="${lackF === 0 ? 'ok':'ng'}">不足F:${lackF}g</span>`;
+    `<span class="${lackP === 0 ? 'ok' : 'ng'}">不足P:${lackP}g</span> /
+     <span class="${lackF === 0 ? 'ok' : 'ng'}">不足F:${lackF}g</span>`;
 
   document.getElementById("replaceArea").innerHTML =
     `プロテイン:${ceil(lackP / 0.7)}g / オリーブオイル:${ceil(lackF)}g`;
@@ -59,9 +66,9 @@ function addRow() {
   tr.innerHTML = `
     <td><input placeholder="鶏むね肉など"></td>
     <td><input type="number" value="0"></td>
-    <td>0</td>
-    <td>0</td>
-    <td>0</td>
+    <td><input type="number" value="0"></td>
+    <td><input type="number" value="0"></td>
+    <td><input type="number" value="0"></td>
     <td>
       <button onclick="this.closest('tr').remove();calculate();saveState()">×</button>
     </td>
@@ -75,15 +82,15 @@ function saveState() {
   const rows = [...document.querySelectorAll("#foodTable tbody tr")].map(tr => ({
     name: tr.children[0].textContent || tr.children[0].querySelector("input")?.value || "",
     amount: tr.children[1].querySelector("input").value,
-    baseP: tr.dataset.baseP || 0,
-    baseF: tr.dataset.baseF || 0,
-    baseK: tr.dataset.baseK || 0,
+    p: tr.children[2].querySelector("input")?.value ?? tr.children[2].textContent,
+    f: tr.children[3].querySelector("input")?.value ?? tr.children[3].textContent,
+    k: tr.children[4].querySelector("input")?.value ?? tr.children[4].textContent,
     fixed: tr.dataset.fixed === "true"
   }));
 
   const state = {
-    targetProtein: targetProtein.value,
-    targetFat: targetFat.value,
+    targetProtein: document.getElementById("targetProtein").value,
+    targetFat: document.getElementById("targetFat").value,
     rows
   };
 
@@ -96,8 +103,9 @@ function loadState() {
   if (!saved) return;
 
   const state = JSON.parse(saved);
-  targetProtein.value = state.targetProtein;
-  targetFat.value = state.targetFat;
+
+  document.getElementById("targetProtein").value = state.targetProtein;
+  document.getElementById("targetFat").value = state.targetFat;
 
   const tbody = document.querySelector("#foodTable tbody");
   tbody.innerHTML = "";
@@ -106,17 +114,17 @@ function loadState() {
     const tr = document.createElement("tr");
     if (r.fixed) tr.dataset.fixed = "true";
 
-    tr.dataset.baseP = r.baseP;
-    tr.dataset.baseF = r.baseF;
-    tr.dataset.baseK = r.baseK;
-
     tr.innerHTML = `
       <td>${r.fixed ? r.name : `<input value="${r.name}">`}</td>
       <td><input type="number" value="${r.amount}"></td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>${r.fixed ? "" : `<button onclick="this.closest('tr').remove();calculate();saveState()">×</button>`}</td>
+      <td>${r.fixed ? r.p : `<input type="number" value="${r.p}">`}</td>
+      <td>${r.fixed ? r.f : `<input type="number" value="${r.f}">`}</td>
+      <td>${r.fixed ? r.k : `<input type="number" value="${r.k}">`}</td>
+      <td>
+        ${r.fixed ? "" :
+          `<button onclick="this.closest('tr').remove();calculate();saveState()">×</button>`
+        }
+      </td>
     `;
     tbody.appendChild(tr);
   });
@@ -131,4 +139,3 @@ document.addEventListener("input", () => {
 /* ===== 初期化 ===== */
 loadState();
 calculate();
-
