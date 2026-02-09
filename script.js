@@ -11,14 +11,18 @@ function calculate() {
   let totalK = 0;
 
   rows.forEach(row => {
-    const amount = Number(row.children[1].querySelector("input").value);
-    const p = Number(row.children[2].textContent);
-    const f = Number(row.children[3].textContent);
-    const k = Number(row.children[4].textContent);
+    const amount = Number(row.children[1].querySelector("input").value) || 0;
 
-    totalP += p;
-    totalF += f;
-    totalK += k;
+    // 100gあたりの値として扱う
+    const baseP = Number(row.children[2].textContent) || 0;
+    const baseF = Number(row.children[3].textContent) || 0;
+    const baseK = Number(row.children[4].textContent) || 0;
+
+    const ratio = amount / 100;
+
+    totalP += baseP * ratio;
+    totalF += baseF * ratio;
+    totalK += baseK * ratio;
   });
 
   totalP = ceil(totalP);
@@ -45,7 +49,7 @@ function calculate() {
   const oliveOil = ceil(lackF);
 
   document.getElementById("replaceArea").innerHTML =
-    `プロテイン:${proteinPowder}g（P${ceil(proteinPowder*0.7)}g） /
+    `プロテイン:${proteinPowder}g（P${ceil(proteinPowder * 0.7)}g） /
      オリーブオイル:${oliveOil}g（F${oliveOil}g）`;
 }
 
@@ -58,7 +62,9 @@ function addRow() {
     <td><input type="number" value="0"></td>
     <td><input type="number" value="0"></td>
     <td><input type="number" value="0"></td>
-    <td><button onclick="this.closest('tr').remove();calculate();saveState()">×</button></td>
+    <td>
+      <button onclick="this.closest('tr').remove();calculate();saveState()">×</button>
+    </td>
   `;
   document.querySelector("#foodTable tbody").appendChild(tr);
   saveState();
@@ -107,7 +113,11 @@ function loadState() {
       <td>${r.p}</td>
       <td>${r.f}</td>
       <td>${r.k}</td>
-      <td>${r.fixed ? "" : `<button onclick="this.closest('tr').remove();calculate();saveState()">×</button>`}</td>
+      <td>
+        ${r.fixed ? "" :
+          `<button onclick="this.closest('tr').remove();calculate();saveState()">×</button>`
+        }
+      </td>
     `;
     tbody.appendChild(tr);
   });
