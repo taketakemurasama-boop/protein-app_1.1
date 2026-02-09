@@ -8,82 +8,98 @@
 </head>
 <body>
 
-<h2>一日の目標</h2>
-タンパク質 <input type="number" id="targetProtein" value="160">
-脂質 <input type="number" id="targetFat" value="50">
+<h1>栄養計算</h1>
 
-<h2>食事内容</h2>
+<section>
+  <h2>一日の目標</h2>
+  <label>
+    タンパク質(g)
+    <input type="number" id="targetProtein" value="160">
+  </label>
+  <label>
+    脂質(g)
+    <input type="number" id="targetFat" value="50">
+  </label>
+</section>
 
-<table id="foodTable">
-  <thead>
-    <tr>
-      <th>食材</th>
-      <th>量(g)</th>
-      <th>P</th>
-      <th>F</th>
-      <th>Kcal</th>
-    </tr>
-  </thead>
-  <tbody>
+<section>
+  <h2>食事内容</h2>
 
-    <tr data-food="rice">
-      <td>白米（炊飯前）</td>
-      <td><input type="number" value="300"></td>
-      <td class="p"></td>
-      <td class="f"></td>
-      <td class="k"></td>
-    </tr>
+  <table id="foodTable">
+    <thead>
+      <tr>
+        <th>食材</th>
+        <th>量(g)</th>
+        <th>P</th>
+        <th>F</th>
+        <th>Kcal</th>
+      </tr>
+    </thead>
+    <tbody>
 
-    <tr data-food="chicken">
-      <td>鶏むね肉（皮なし）</td>
-      <td><input type="number" value="400"></td>
-      <td class="p"></td>
-      <td class="f"></td>
-      <td class="k"></td>
-    </tr>
+      <tr data-food="rice">
+        <td>白米（炊飯前）</td>
+        <td><input type="number" value="150"></td>
+        <td class="p"></td>
+        <td class="f"></td>
+        <td class="k"></td>
+      </tr>
 
-    <tr data-food="allbran">
-      <td>オールブラン</td>
-      <td><input type="number" value="40"></td>
-      <td class="p"></td>
-      <td class="f"></td>
-      <td class="k"></td>
-    </tr>
+      <tr data-food="chicken">
+        <td>鶏むね肉（皮なし）</td>
+        <td><input type="number" value="400"></td>
+        <td class="p"></td>
+        <td class="f"></td>
+        <td class="k"></td>
+      </tr>
 
-    <tr data-food="natto">
-      <td>納豆</td>
-      <td><input type="number" value="45"></td>
-      <td class="p"></td>
-      <td class="f"></td>
-      <td class="k"></td>
-    </tr>
+      <tr data-food="allbran">
+        <td>オールブラン</td>
+        <td><input type="number" value="40"></td>
+        <td class="p"></td>
+        <td class="f"></td>
+        <td class="k"></td>
+      </tr>
 
-    <tr data-food="yogurt">
-      <td>ヨーグルト</td>
-      <td><input type="number" value="100"></td>
-      <td class="p"></td>
-      <td class="f"></td>
-      <td class="k"></td>
-    </tr>
+      <tr data-food="natto">
+        <td>納豆</td>
+        <td><input type="number" value="45"></td>
+        <td class="p"></td>
+        <td class="f"></td>
+        <td class="k"></td>
+      </tr>
 
-    <tr data-food="milk">
-      <td>牛乳</td>
-      <td><input type="number" value="100"></td>
-      <td class="p"></td>
-      <td class="f"></td>
-      <td class="k"></td>
-    </tr>
+      <tr data-food="yogurt">
+        <td>ヨーグルト</td>
+        <td><input type="number" value="100"></td>
+        <td class="p"></td>
+        <td class="f"></td>
+        <td class="k"></td>
+      </tr>
 
-  </tbody>
-</table>
+      <tr data-food="milk">
+        <td>牛乳</td>
+        <td><input type="number" value="100"></td>
+        <td class="p"></td>
+        <td class="f"></td>
+        <td class="k"></td>
+      </tr>
 
-<h2>合計接種Cal</h2>
-<div id="totalArea"></div>
+    </tbody>
+  </table>
+</section>
 
-<h2>不足栄養素</h2>
-<div id="lackArea"></div>
+<section>
+  <h2>合計</h2>
+  <div id="totalArea"></div>
+</section>
+
+<section>
+  <h2>不足・置き換え</h2>
+  <div id="lackArea"></div>
+  <div id="replaceArea"></div>
+</section>
 
 <script src="script.js"></script>
 </body>
 </html>
-
