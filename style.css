@@ -1,6 +1,31 @@
 body {
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
+  line-height: 1.6;
+  padding: 12px;
+}
+
+h1 {
+  font-size: 20px;
+}
+
+h2 {
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+section {
+  margin-bottom: 16px;
+}
+
+label {
+  margin-right: 12px;
+}
+
+input {
+  width: 80px;
+  text-align: right;
+  margin-left: 4px;
 }
 
 table {
@@ -10,14 +35,16 @@ table {
 
 th, td {
   border: 1px solid #ccc;
-  padding: 6px;
+  padding: 6px 8px;
   text-align: center;
 }
 
-input {
-  width: 70px;
-  text-align: right;
+.ok {
+  color: #1a7f37;
+  font-weight: bold;
 }
 
-.ok { color: green; }
-.ng { color: red; }
+.ng {
+  color: #d1242f;
+  font-weight: bold;
+}
