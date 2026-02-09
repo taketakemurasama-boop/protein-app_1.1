@@ -2,29 +2,28 @@ function ceil(v) {
   return Math.ceil(v);
 }
 
-function calculate() {
-  const rows = document.querySelectorAll("#foodTable tbody tr");
+/* 食材データ（100gあたり） */
+const FOOD_DB = {
+  chicken: { p: 23, f: 1.5, k: 120 }
+};
 
+function calculate() {
   let totalP = 0;
   let totalF = 0;
   let totalK = 0;
 
-  rows.forEach(row => {
+  document.querySelectorAll("#foodTable tbody tr").forEach(row => {
+    const food = row.dataset.food;
 
-    /* ===== 鶏むね肉 ===== */
-    if (row.dataset.chicken === "true") {
+    // 鶏むね肉（可変）
+    if (food === "chicken") {
       const amount = Number(row.querySelector("input").value) || 0;
-
-      // 皮なし・100gあたり
-      const baseP = 23;
-      const baseF = 1.5;
-      const baseK = 120;
-
+      const base = FOOD_DB.chicken;
       const ratio = amount / 100;
 
-      const p = baseP * ratio;
-      const f = baseF * ratio;
-      const k = baseK * ratio;
+      const p = base.p * ratio;
+      const f = base.f * ratio;
+      const k = base.k * ratio;
 
       row.querySelector(".p").textContent = ceil(p);
       row.querySelector(".f").textContent = ceil(f);
@@ -36,14 +35,10 @@ function calculate() {
       return;
     }
 
-    /* ===== 固定行 ===== */
-    const p = Number(row.children[2].textContent) || 0;
-    const f = Number(row.children[3].textContent) || 0;
-    const k = Number(row.children[4].textContent) || 0;
-
-    totalP += p;
-    totalF += f;
-    totalK += k;
+    // 固定行
+    totalP += Number(row.querySelector(".p").textContent) || 0;
+    totalF += Number(row.querySelector(".f").textContent) || 0;
+    totalK += Number(row.querySelector(".k").textContent) || 0;
   });
 
   totalP = ceil(totalP);
@@ -62,9 +57,6 @@ function calculate() {
   document.getElementById("lackArea").innerHTML =
     `<span class="${lackP === 0 ? 'ok' : 'ng'}">不足P:${lackP}g</span> /
      <span class="${lackF === 0 ? 'ok' : 'ng'}">不足F:${lackF}g</span>`;
-
-  document.getElementById("replaceArea").textContent =
-    `プロテイン:${ceil(lackP / 0.7)}g / オリーブオイル:${ceil(lackF)}g`;
 }
 
 document.addEventListener("input", calculate);
