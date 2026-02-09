@@ -1,11 +1,11 @@
 const FOOD_DB = {
-  rice:    { p: 6.1, f: 0.9, k: 356 }, // 炊飯前100g
-  protein: { p: 70,  f: 5,   k: 400 }, // プロテイン100g想定
-  chicken: { p: 23,  f: 1.5, k: 120 },
-  allbran: { p: 13,  f: 8.3, k: 350 },
-  natto:   { p: 11,  f: 16,  k: 200 },
-  yogurt:  { p: 3,   f: 4,   k: 60 },
-  milk:    { p: 3.3, f: 3.8, k: 67 }
+  rice:    { p: 6.1, f: 0.9, k: 342 }, // 炊飯前100g
+  protein: { p: 72.3,  f: 5.7,   k: 392 }, // プロテイン100g想定
+  chicken: { p: 22.5,  f: 2.6, k: 120 },
+  allbran: { p: 15,  f: 6, k: 350 },
+  natto:   { p: 19.4,  f: 11,  k: 212 },
+  yogurt:  { p: 3.5,   f: 3.7,   k: 61 },
+  milk:    { p: 3.3, f: 3.8, k: 65 }
 };
 
 const PROTEIN_RATIO = 0.7; // 不足分換算用
@@ -104,3 +104,4 @@ function loadState() {
 document.addEventListener("input", calculate);
 loadState();
 calculate();
+
