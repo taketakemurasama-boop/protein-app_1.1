@@ -13,16 +13,10 @@ function calculate() {
   rows.forEach(row => {
     const amount = Number(row.children[1].querySelector("input").value) || 0;
 
-    // 100gあたりの基準値（初回だけ保存）
-    if (!row.dataset.baseP) {
-      row.dataset.baseP = row.children[2].textContent || 0;
-      row.dataset.baseF = row.children[3].textContent || 0;
-      row.dataset.baseK = row.children[4].textContent || 0;
-    }
-
-    const baseP = Number(row.dataset.baseP);
-    const baseF = Number(row.dataset.baseF);
-    const baseK = Number(row.dataset.baseK);
+    // P/F/K は input から読む（100gあたり）
+    const baseP = Number(row.children[2].querySelector("input")?.value || row.children[2].textContent) || 0;
+    const baseF = Number(row.children[3].querySelector("input")?.value || row.children[3].textContent) || 0;
+    const baseK = Number(row.children[4].querySelector("input")?.value || row.children[4].textContent) || 0;
 
     const ratio = amount / 100;
 
@@ -30,15 +24,14 @@ function calculate() {
     const calcF = baseF * ratio;
     const calcK = baseK * ratio;
 
-    // 行に表示（← これが今まで無かった）
-    row.children[2].textContent = ceil(calcP);
-    row.children[3].textContent = ceil(calcF);
-    row.children[4].textContent = ceil(calcK);
-
     totalP += calcP;
     totalF += calcF;
     totalK += calcK;
   });
+
+  document.getElementById("totalArea").innerHTML =
+    `P:${Math.ceil(totalP)}g / F:${Math.ceil(totalF)}g / ${Math.ceil(totalK)}kcal`;
+}
 
   document.getElementById("totalArea").innerHTML =
     `P:${ceil(totalP)}g / F:${ceil(totalF)}g / ${ceil(totalK)}kcal`;
@@ -138,3 +131,4 @@ document.addEventListener("input", () => {
 /* ===== 初期化 ===== */
 loadState();
 calculate();
+
